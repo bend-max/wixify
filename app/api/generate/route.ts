@@ -38,9 +38,8 @@ export async function POST(req: NextRequest) {
     quality: 'standard',
   })
 
-  const imageData = imageRes.data?.[0]
-if (!imageData) return NextResponse.json({ error: 'לא התקבלה תמונה' }, { status: 500 })
-
+const imageData = imageRes.data?.[0]
+if (!imageData) return NextResponse.json({ error: 'שגיאה' }, { status: 500 })
 let imageUrl: string
 
 if (imageData.b64_json) {
