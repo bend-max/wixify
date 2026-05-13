@@ -23,15 +23,19 @@ export default function Home() {
     setRefImages(data.images ?? [])
   }
 
-  async function uploadFile(file: File) {
-    setUploading(true)
+ async function uploadFile(file: File) {
+  setUploading(true)
+  try {
     const form = new FormData()
     form.append('file', file)
     await fetch('/api/upload', { method: 'POST', body: form })
     await fetchImages()
+  } catch (e) {
+    console.error(e)
+  } finally {
     setUploading(false)
   }
-
+}
   async function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (file) await uploadFile(file)
