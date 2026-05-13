@@ -38,16 +38,18 @@ export async function POST(req: NextRequest) {
     quality: 'standard',
   })
 
-  const imageData = imageRes.data[0]
-  let imageUrl: string
+  const imageData = imageRes.data?.[0]
+if (!imageData) return NextResponse.json({ error: 'לא התקבלה תמונה' }, { status: 500 })
 
-  if (imageData.url) {
-    imageUrl = imageData.url
-  } else if (imageData.b64_json) {
-    imageUrl = `data:image/png;base64,${imageData.b64_json}`
-  } else {
-    return NextResponse.json({ error: 'לא התקבלה תמונה' }, { status: 500 })
-  }
+let imageUrl: string
+
+if (imageData.b64_json) {
+  imageUrl = `data:image/png;base64,${imageData.b64_json}`
+} else if (imageData.url) {
+  imageUrl = imageData.url
+} else {
+  return NextResponse.json({ error: 'לא התקבלה תמונה' }, { status: 500 })
+}
 
   return NextResponse.json({ imageUrl })
 }
